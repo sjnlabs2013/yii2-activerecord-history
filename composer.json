@@ -1,0 +1,20 @@
+{
+    "name": "sjnlabs2013/yii2-activerecord-history",
+    "description": "Storage history of changes to ActiveRecord",
+    "keywords": ["yii2", "history", "activerecord"],
+    "type": "yii2-extension",
+    "minimum-stability": "stable",
+    "license": "GNU General Public License v3.0",
+    "authors": [
+        {
+            "name": "Jerome Nicholas",
+            "email": "info@jeromenicholas.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": { "sjnlabs2013\\history\\": "src\\" }
+    }
+}

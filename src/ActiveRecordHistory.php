@@ -1,0 +1,56 @@
+<?php
+/**
+ * @link http://jeromenicholas.com
+ * @author Jerome Nicholas
+ */
+
+namespace jerome\history;
+
+use jerome\history\managers\BaseManager;
+use Yii;
+
+/**
+ * Class ActiveRecordHistory
+ * @package jerome\history
+ * @deprecated
+ */
+class ActiveRecordHistory extends \yii\db\ActiveRecord
+{
+
+    /**
+     * @var BaseManager
+     */
+    protected $_historyManager = 'jerome\history\managers\DBManager';
+
+    /**
+     * @var array
+     */
+    protected $_optionsHistoryManager;
+
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        $manager = new $this->_historyManager;
+
+        $type = $insert ? $manager::AR_INSERT : $manager::AR_UPDATE;
+
+        if ($this->getOldPrimaryKey() != $this->getPrimaryKey())
+            $type = $manager::AR_UPDATE_PK;
+
+        $manager->setOptions($this->_optionsHistoryManager)
+                 ->setUpdatedFields($changedAttributes)
+                 ->run($type, $this);
+        return parent::afterSave($insert, $changedAttributes);
+    }
+
+    public function afterDelete()
+    {
+        $manager = new $this->_historyManager;
+
+        $manager->setOptions($this->_optionsHistoryManager)
+            ->run($manager::AR_DELETE, $this);
+        return parent::afterDelete();
+    }
+
+
+}
